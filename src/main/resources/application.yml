@@ -1,3 +1,23 @@
+resilience4j:
+  circuitbreaker:
+    configs:
+      defecto:
+        sliding-window-size: 6
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 20s
+        permitted-number-of-calls-in-half-open-state: 4
+        slow-call-rate-threshold: 50
+        slow-call-duration-threshold: 2s
+    instances:
+      cursos:
+        base-config: defecto
+  timelimiter:
+    configs:
+      defecto:
+        timeout-duration: 2s
+    instances:
+      cursos:
+        base-config: defecto
 spring:
   cloud:
     gateway:
@@ -14,3 +34,45 @@ spring:
               - POST
               - PUT
               - DELETE
+      routes:
+        - id: microservicio-usuarios
+          uri: lb://microservicio-usuarios
+          predicates:
+            - Path=/api/alumnos/**
+          filters:
+            - StripPrefix=2
+        - id: microservicio-cursos
+          uri: lb://microservicio-cursos
+          predicates:
+            - Path=/api/cursos/**
+          filters:
+            - StripPrefix=2
+            - name: Ejemplo
+              args:
+                mensaje: Hola mi mensaje perzonalizado
+                cookieNombre: usuario
+                cookieValor: NicolasHayden
+        - id: microservicio-examenes
+          uri: lb://microservicio-examenes
+          predicates:
+            - Path=/api/examenes/**
+          filters:
+            - StripPrefix=2
+        - id: microservicio-respuestas
+          uri: lb://microservicio-respuestas
+          predicates:
+            - Path=/api/respuestas/**
+          filters:
+            - StripPrefix=2
+        - id: microservicio-administrador
+          uri: lb://microservicio-administrador
+          predicates:
+            - Path=/api/administrador/**
+          filters:
+            - StripPrefix=2
+        - id: microservicio-oauth
+          uri: lb://microservicio-oauth
+          predicates:
+            - Path=/api/security/**
+          filters:
+            - StripPrefix=2

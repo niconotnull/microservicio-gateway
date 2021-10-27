@@ -77,6 +77,13 @@
 		</dependency>
 		<!--  Fin de las dependencias de JWT  -->
 
+		<!-- Dependencia que nos permite trabajar la resilensia y el corto-circuito en el gateway  -->
+		<!-- Tiene que ser reactiva  -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-circuitbreaker-reactor-resilience4j</artifactId>
+		</dependency>
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
